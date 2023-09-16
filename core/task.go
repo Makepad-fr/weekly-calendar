@@ -5,7 +5,7 @@ import "time"
 type User struct {
 }
 
-type Event struct {
+type Task struct {
 	ID          string      `json:"id"`          // The unique id of the event
 	Title       string      `json:"title"`       // Title of the event
 	Description string      `json:"description"` // The descroption of the event
