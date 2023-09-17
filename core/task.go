@@ -21,6 +21,8 @@ type Task struct {
 	Plannings   []string    `json:"plannings"`   // Planning IDs that contains this task
 	Owners      []User      `json:"owners"`      // The owner of the task
 	Done        bool        `json:"done"`        // A boolean indicating that wether a task is done or not
+	StartedAt   *time.Time  `json:"started_at"`  // The time when the task is started. It's optional
+	DoneAt      *time.Time  `json:"done_at"`     // The time when the task is complete. It's optional
 }
 
 // NewTask creates new task with given paramters
@@ -77,6 +79,51 @@ func (t *Task) RemoveFromPlanning(pID string) error {
 	}
 	t.Plannings = removElementFromSliceeWithIndex(t.Plannings, index)
 	return nil
+}
+
+func (t *Task) startTimer() error {
+	if t.StartedAt != nil {
+		return fmt.Errorf("Task %s has already a start time: %v", t.ID, t.StartedAt)
+	}
+	now := time.Now()
+	t.StartedAt = &now
+	return nil
+}
+
+func (t Task) hasStartTime() bool {
+	return t.StartedAt != nil
+}
+
+func (t Task) hasDoneTime() bool {
+	return t.DoneAt != nil
+}
+
+func (t *Task) StopTimer() error {
+	if t.hasDoneTime() {
+		return fmt.Errorf("Task %s has already a done time: %v", t.ID, t.DoneAt)
+	}
+	if t.hasStartTime() {
+		now := time.Now()
+		t.DoneAt = &now
+	}
+	return nil
+}
+
+func (t *Task) Complete() error {
+	if t.Done {
+		return fmt.Errorf("Task is already done")
+	}
+	t.Done = true
+	return t.StopTimer()
+}
+
+func (t *Task) UnDone() error {
+	if !t.Done {
+		return fmt.Errorf("Task %s is not done yet", t.ID)
+	}
+	t.StartedAt = nil
+	t.DoneAt = nil
+	t.Done = false
 }
 
 // TODO: Add owner
