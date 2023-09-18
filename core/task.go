@@ -124,6 +124,7 @@ func (t *Task) UnDone() error {
 	t.StartedAt = nil
 	t.DoneAt = nil
 	t.Done = false
+	return nil
 }
 
 // TODO: Add owner
