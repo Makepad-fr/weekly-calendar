@@ -131,6 +131,11 @@ func (t *Task) UnDone() error {
 // TODO: Remove owner
 // TODO: Put the task in done
 // TODO: Put the task to undone
+
+func (t Task) hasOwner(user User) bool {
+	return isExistsInSlice(t.Owners, user, areSameUser)
+}
+
 func areSameUser(e1 User, e2 User) bool {
 	return e1.ID == e2.ID
 }
