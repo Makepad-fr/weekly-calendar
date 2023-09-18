@@ -127,7 +127,16 @@ func (t *Task) UnDone() error {
 	return nil
 }
 
-// TODO: Add owner
+func (t *Task) AddOwner(o User) error {
+	// Check owner exists
+	if t.hasOwner(o) {
+		return fmt.Errorf("Task %s has already owner %s", t.ID, o.ID)
+	}
+	// Append owner to the owners list
+	t.Owners = append(t.Owners, o)
+	return nil
+}
+
 // TODO: Remove owner
 // TODO: Put the task in done
 // TODO: Put the task to undone
