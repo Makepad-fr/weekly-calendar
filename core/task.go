@@ -131,9 +131,12 @@ func (t *Task) UnDone() error {
 // TODO: Remove owner
 // TODO: Put the task in done
 // TODO: Put the task to undone
+func areSameUser(e1 User, e2 User) bool {
+	return e1.ID == e2.ID
+}
 
 func (t Task) hasAssignee(user User) bool {
-	return isExistsInSlice(t.Assignee, user, func(e1 User, e2 User) bool { return e1.ID == e2.ID })
+	return isExistsInSlice(t.Assignee, user, areSameUser)
 }
 
 func (t Task) isInPlanning(planningId string) bool {
@@ -141,7 +144,7 @@ func (t Task) isInPlanning(planningId string) bool {
 }
 
 func (t Task) indexOfAssignee(user User) (int, error) {
-	index := indexOf(t.Assignee, user, func(u1, u2 User) bool { return u1.ID == u2.ID })
+	index := indexOf(t.Assignee, user, areSameUser)
 	if index != -1 {
 		return index, nil
 	}
