@@ -138,8 +138,6 @@ func (t *Task) AddOwner(o User) error {
 }
 
 // TODO: Remove owner
-// TODO: Put the task in done
-// TODO: Put the task to undone
 
 func (t Task) hasOwner(user User) bool {
 	return isExistsInSlice(t.Owners, user, areSameUser)
