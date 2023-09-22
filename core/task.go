@@ -137,7 +137,14 @@ func (t *Task) AddOwner(o User) error {
 	return nil
 }
 
-// TODO: Remove owner
+func (t *Task) RemoveOwner(o User) error {
+  ownerIndex, err := t.indexOfOwner()
+  if err != nil {
+    return err
+  }
+  t.Owners = removElementFromSliceeWithIndex(t.Owners, ownerIndex)
+  return nil
+}
 
 func (t Task) hasOwner(user User) bool {
 	return isExistsInSlice(t.Owners, user, areSameUser)
@@ -161,4 +168,12 @@ func (t Task) indexOfAssignee(user User) (int, error) {
 		return index, nil
 	}
 	return -1, fmt.Errorf("Task %s is not assigned to user %s", t.ID, user.ID)
+}
+
+func (t Task) indexOfOwner(user User) (int, error) {
+  index := indexOf(t.Owners, user, areSameUser)
+  if index != -1 {
+    return index, nil
+  }
+  return -1, fmt.Errorf("Task %s is not owned by user %s", t.ID, user.ID)
 }
